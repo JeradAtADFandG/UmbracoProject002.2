@@ -1,0 +1,65 @@
+/**umb_name: Header 1*/
+h1 {}
+
+/**umb_name: Header 2*/
+h2 {}
+
+/**umb_name: Header 3*/
+h3 {}
+
+/**umb_name: Header 4*/
+h4 {}
+
+/**umb_name: Header 4*/
+h5 {}
+
+/**umb_name: Paragraph*/
+p {}
+
+/**umb_name: Paragraph - No Margin*/
+p.altP {  }
+
+/**umb_name: White Notice Box*/
+div.alert.alert-white {}
+
+/**umb_name: Red Notice Box*/
+div.alert.alert-danger {}
+
+/**umb_name: Green Notice Box*/
+div.alert.alert-success {}
+
+/**umb_name: Blue Notice Box*/
+div.alert.alert-info {}
+
+/**umb_name: Yellow Notice Box*/
+div.alert.alert-warning {}
+
+/**umb_name: Badge*/
+.badge {}
+
+/**umb_name: Well*/
+div.well {}
+
+/**umb_name: Card*/
+div.link-card {}
+
+/**umb_name: White label*/
+.whiteLabel {}
+
+/**umb_name: Default label*/
+.defaultLabel {}
+
+/**umb_name: Red label*/
+.redLabel {}
+
+/**umb_name: Green label*/
+.successLabel {}
+
+/**umb_name: Primary Blue label*/
+.primaryLabel {}
+
+/**umb_name: Info Blue label*/
+.infoLabel {}
+
+/**umb_name: Yellow Notice Box*/
+.warningLabel {}

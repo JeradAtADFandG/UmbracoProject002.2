@@ -1,0 +1,15 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.SiteMap>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "_DefaultHeaderLayout.cshtml";
+    ViewBag.CallBannerLayout = true;
+    
+    ViewBag.Header = Model.Name;
+    ViewBag.SubHeader = "List of pages within the site.";
+}
+
+<div class="rte">
+    @Umbraco.RenderMacro("SiteMap")
+</div>

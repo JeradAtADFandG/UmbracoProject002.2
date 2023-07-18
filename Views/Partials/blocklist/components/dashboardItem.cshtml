@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var content = (ContentModels.DashboardItem)Model.Content;
+    var settings = (ContentModels.DashboardItem)Model.Settings;
+    
+
+    var icon = content.Icon;
+    var header = content.SectionHeader;
+    //var subHeader = content.SectionSubHeader;
+    //var rte = content.Content;
+    var link = content.Link;
+
+
+}
+
+
+
+    <div class="dashboard-item">
+        <div class="icon">
+            <a href="@(link.Url == null ? link.Url : link.Url)">
+                <!--<img alt="image.Name" src="image.Url" style="max-width:42px; max-height:40px;" />-->
+                <i class="fa @icon"></i>
+                <span class="sr-only">@header</span>test
+            </a>
+        </div>
+        <h3>@header</h3>
+    </div>

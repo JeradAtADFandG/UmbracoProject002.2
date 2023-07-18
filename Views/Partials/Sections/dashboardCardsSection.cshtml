@@ -1,0 +1,75 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.DashboardCardsSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+
+    var content = Model;
+    var cards = Model.DashboardCard.Select(x => (ContentModels.DashboardCardsSectionItem)x.Content);
+    var dashboardSubTitleLine1 = content.SectionHeader;
+    var dashboardSubTitleLine2 = content.SectionSubHeader;
+    
+    var count = 1;
+    //var cards = content.Children().Take(10);
+}
+
+<div class="employee-dashboard">
+    @if(cards != null && cards.Any())
+    {
+        var lastCard = cards.Last();
+    
+        foreach(var card in cards)
+        {
+            var icon = card.SectionSubHeader;
+            var image = card.SectionSubHeader;
+            var title = card.SectionHeader;
+            var link = card.Link;
+            
+            if(count == 1 || count == 6)
+            {
+                if(count == 1)
+                { 
+                    if (content.HasValue("dashboardSubTitleLine1")) 
+                    { 
+                        <h3 class="dashboard-header">@dashboardSubTitleLine1</h3> 
+                    } 
+                }
+                else
+                {
+                    if (content.HasValue("dashboardSubTitleLine2")) 
+                    { 
+                        <h3 class="dashboard-header">@dashboardSubTitleLine2</h3> 
+                    }
+                }
+                @:<!--Start row-->
+                @:<div class="row row-cols-auto justify-content-center">
+            }
+                    @:<div class="col">
+                        @:<div class="dashboard-item">
+                            @:<div class="icon">
+                                @:<a href="@(link == null ? link.First().Url : link.First().Url)">
+                                    if(image != null)
+                                    {
+                                        @:<img alt="image.Name" src="image.Url" style="max-width:42px; max-height:40px;" />
+                                    }
+                                    else
+                                    {
+                                        @:<i class="fa icon"></i>
+                                    }
+                                    @:<span class="sr-only">@title</span>
+                                @:</a>
+                                
+                            @:</div>
+                            @:<h3>@title</h3>
+                        @:</div>
+                    @:</div>
+            if(count == 5 || count == 10 || card.Equals(lastCard))
+            {
+                @:</div>
+                @:<!--End row-->
+            }
+            
+            count++;
+        }   
+    }
+</div>

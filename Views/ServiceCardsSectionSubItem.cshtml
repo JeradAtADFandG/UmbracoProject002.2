@@ -1,0 +1,49 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ServiceCardsSectionSubItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "_DefaultBannerLayout.cshtml";
+}
+
+@{
+    // Add log statement to track when the view is being loaded
+    System.Diagnostics.Debug.WriteLine("ServiceCardsSectionSubItem view loaded");
+}
+
+<style>
+    #serviceCardsSectionSubItem,
+    .sub-service.show {
+        min-height: 800px;
+    }
+
+    .sub-service.show {
+        position: relative;
+        padding-top: 10px;
+        background-color: #132a46;
+        z-index: 9990;
+    }
+
+        .sub-service.show .go-back-icon {
+            display: none;
+        }
+</style>
+
+<div id="serviceCardsSectionSubItem"></div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var serviceCardsSectionSubItem = $("#serviceCardsSectionSubItem");
+
+            if (!serviceCardsSectionSubItem.data("loaded")) {
+                serviceCardsSectionSubItem.data("loaded", true);
+
+                serviceCardsSectionSubItem.load('@Url.Content("/umbraco/Surface/ModalsSurface/RenderServiceCardsSectionSubItem?id=" + @Model.Id)', function () {
+                    serviceCardsSectionSubItem.find("#subService").addClass("show");
+                });
+            }
+        });
+    </script>
+}
+

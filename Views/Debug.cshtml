@@ -1,0 +1,80 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Debug>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Extensions
+@using System.Linq
+@{
+    Layout = null;
+
+    var r = Model.Root();
+
+    var d = r.Properties.ToList();
+
+    foreach (var t in d)
+    
+    {
+        <p>@t.Alias</p>
+
+    }
+
+    var primaryNav = r.Children.Where(x => x.ContentType.Alias == "primaryNavigationContainer").FirstOrDefault();
+    var navItemCollection = primaryNav?.Children.Where(x => x.ContentType.Alias == "primaryNavigationItem").ToList();
+    var navItemCollection2 = primaryNav?.Children.Where(x => x.ContentType.Alias == "primaryNavigationItem");
+
+    var home = Umbraco.AssignedContentItem.AncestorOrSelf<Home>();
+    var pNav = home.Children<PrimaryNavigationContainer>().FirstOrDefault();
+    var navC = pNav.Children<PrimaryNavigationItem>();
+
+    foreach (var l in navC)
+    {
+        <p>Test Link: <a href="@l">@l.Url()</a>@l.PrimaryNavigationItemUrl.</p>
+
+    }
+
+}
+<p>@r.Value("departmentName")</p>
+<p>Umbraco.AssignedContentItem Home = @home</p>
+<p>Model.Root() = @Model.Root();</p>
+<p>@home.</p>
+
+<p>old navItemCollection @navItemCollection</p>
+<p>new navItemCollection @navItemCollection2</p>
+
+
+
+
+
+
+@if (navItemCollection2 != null && navItemCollection2.Any())
+{
+    foreach (var navItem in navItemCollection2)
+    {
+                var link = navItem.Url();
+        var t = navItem;
+
+        var z = navItem.Properties.ToList();
+        foreach (var y in z)
+        {
+            <p>y.alias: @y.Alias <br />value: @y.GetSourceValue()</p>
+        }
+        <p>Print Link: name: @navItem.Name url: @navItem.Url() properties: @navItem.Properties</p>
+                <p>link type: @link.GetType()</p>
+                <p>@link</p>
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

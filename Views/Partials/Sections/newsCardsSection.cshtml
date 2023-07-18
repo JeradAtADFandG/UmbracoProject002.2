@@ -1,0 +1,36 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.NewsCardsSection>
+@using Umbraco.Web.Models
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+    ViewBag.NoOverflowClass = "no-overflow";
+    
+    var content = Model.Content;
+    var cards = content.Children().Where(x => x.IsVisible()).OrderByDescending(x => x.GetPropertyValue<DateTime>("newsCardDate").ToString("yyyy-MM-dd")).Take(3);
+}
+
+<div class="row">
+@foreach(var card in cards)
+{
+    <div class="col-xl-3">
+        <div class="news-card">
+            <div class="date text-center">
+                <span class="icon fa fa-calendar"></span>
+                <span class="text">@(card.GetPropertyValue<DateTime>("newsCardDate").ToString("MMMM d, yyyy"))</span>
+            </div>
+            <h3 class="title text-center">
+                <a href="@card.Url" class="interactive">@(Umbraco.Truncate(card.Name, 33))</a>
+            </h3>
+        </div>
+    </div>
+}
+
+    <div class="col-xl-3">
+        <div class="news-card news-card-action table">
+            <div class="table-center-vertical text-center">
+                <a class="btn btn-fill" href="@content.Url">See More</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿@model Umbraco.Web.UI.Models.FeedbackModel 
+
+@using (Html.BeginUmbracoForm("SubmitForm", "FeedbackWidgetSurface"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div id="formtest1" class="form-group">
+        @Html.TextBoxFor(m => m.EmailAddress, new { id = "txtBox_EmailAddress", name = "EmailAddress", @class = "form-control", type = "email", placeholder = "Enter your e-mail" })
+        @Html.ValidationMessageFor(m => m.EmailAddress, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group submit">
+        @Html.TextAreaFor(m => m.Message, new { id = "txtArea_EmailBody", name = "Message", @class = "form-control", cols = "20", rows = "2", placeholder = "Leave a message..." })
+        @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
+        <input type="submit" name="Submit" value="Submit" class="btn btn-fill" />
+    </div>
+}

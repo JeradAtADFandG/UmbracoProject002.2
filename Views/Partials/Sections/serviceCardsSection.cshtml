@@ -1,0 +1,37 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ServiceCardsSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+
+    var cards = Model.Children();
+}
+
+<div id="serviceCards">
+    <div class="row justify-content-center">
+        @foreach (var card in cards)
+        {
+            var image = card.Value<IPublishedContent>("itemImage");
+            var description = card.Value<string>("itemDescription");
+
+            <div class="col-lg-6 col-xl-4">
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <img class="service-card-image img-thumbnail" src="@image.Url()" alt="@image.Name">
+                    </div>
+                    <div class="service-card-body">
+                        <h2 class="service-card-title">@card.Name</h2>
+                        <p class="service-card-description">@Html.Truncate(description, 105)</p>
+                        <a href="@card.Url()" id="@card.Id" class="btn btn-primary w-100" data-request-url='@Url.Action("RenderServiceCardsSectionItem", "ModalsSurface")'>
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+

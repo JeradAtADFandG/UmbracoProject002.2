@@ -1,0 +1,42 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Core.Models.Blocks.BlockListItem>;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    var content = (ContentModels.AccordionPanel)Model.Content;
+    var settings = (ContentModels.AccordionPanel)Model.Settings;
+ 
+}
+
+
+
+
+
+
+<div class="accordion" role="tablist" aria-multiselectable="true">
+@{
+
+        var collapseId = content.ItemAnchorID;
+        //collapseId++;
+        var target = "collapse" + collapseId.ToString();
+        var title = content.Title;
+        var contents = content.Content;
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="@content.Title">
+                <button class="accordion-button collapsed" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#@target" 
+                        aria-expanded="false" 
+                        aria-controls="@target">
+                    @title
+                </button>
+            </h2>
+            <div id="@target" class="accordion-collapse collapse" aria-labelledby="@content.Title">
+                <div class="accordion-body">
+                    @contents
+                </div>
+            </div>
+        </div>
+        
+    }
+</div>

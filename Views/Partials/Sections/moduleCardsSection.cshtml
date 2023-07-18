@@ -1,0 +1,43 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ModuleCardsSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core.Models
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+    var cards = Model.Children();
+}
+
+@if (cards != null && cards.Any())
+{
+    <div class="row justify-content-center">
+        @foreach(var card in cards)
+        {
+            
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="module-card">
+                    @if(card.Value<IPublishedContent>("moduleCardImageIcon") != null)
+                    {
+                        var imgSrc = card.Value<IPublishedContent>("moduleCardImageIcon")?.MediaUrl();
+                        <img 
+                            alt='@(card.Value<IPublishedContent>("moduleCardImageIcon").Name)'
+                            src='@imgSrc'
+                            style="height:50px;width:auto;" />
+                    }
+                    else 
+                    {
+                        <span class='big fa @(card.Value<string>("moduleCardsIcon")) icon'></span>
+                    }
+                    
+                    <h2 class="title">@Html.Truncate(card.Value<string>("moduleCardTitle"), 20)</h2>
+                    <p class="text">
+                        @Html.Truncate(card.Value<string>("moduleCardText"), 100)
+                    </p>
+                    <div class="action">
+                        <a href='@(card.Value<Link>("moduleCardButton").Url)' class="btn btn-fill" target='@(card.Value<Link>("moduleCardButton").Target)'>
+                            @(card.Value<Link>("moduleCardButton").Name)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+} 

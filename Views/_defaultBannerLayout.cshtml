@@ -1,0 +1,55 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+	Layout = "Master.cshtml";
+	var content = Model;
+	var bannerTitle = content.Value("bannerTitle")?.ToString();
+    var bannerUrl = content.Value<IPublishedContent>("bannerImage")?.MediaUrl();
+    var bannerImageOpacity = content.Value<decimal>("bannerImageOpacity");
+    var defaultBannerUrl = content.Value<IPublishedContent>("defaultBanner")?.MediaUrl();
+    
+    ViewBag.BannerTitle = string.IsNullOrWhiteSpace(bannerTitle) ? content.Name : bannerTitle;
+    ViewBag.BannerImageOpacity = bannerImageOpacity;
+    ViewBag.HeroBgImage = string.IsNullOrWhiteSpace(bannerUrl) ? defaultBannerUrl : bannerUrl;
+}
+
+@section HeroAreaContent {
+    <style>
+        .hero-area { min-height: 290px; }
+        .hero-area h1.banner-title {
+            width: 70%;
+            max-width: 1080px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 41px;
+            font-weight: 600;
+            letter-spacing: 0.3rem;
+            margin-top: 23px;
+            text-transform: uppercase;
+            text-align: center;
+            color: #fff;
+        }
+    </style>
+    <h1 class="banner-title">@ViewBag.BannerTitle</h1>
+    <div class="hero-area-content banner">
+        <div class="container text-center">
+            <div class="search">
+                <form action="/settings/search-results/" method="get" name="gs">
+                    <input type="search" class="form-control" placeholder="Search" name="q">
+                    <button class="btn-clear" aria-label="Search" name="submit" type="submit"><i class="icon fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@RenderBody()
+
+@if (IsSectionDefined("Scripts"))
+{
+    @section Scripts {
+        @RenderSection("Scripts")
+    }
+}

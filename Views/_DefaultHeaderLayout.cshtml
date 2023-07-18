@@ -1,0 +1,39 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    if(ViewBag.CallBannerLayout != null && ViewBag.CallBannerLayout)
+    {
+        Layout = "_DefaultBannerLayout.cshtml";
+    }
+    var m = Model;
+    var header = m.Value("sectionHeader")?.ToString();
+    var subHeader = m.Value("sectionSubHeader")?.ToString();
+    var sectionId = m.Value("sectionId");
+    var propBackgroundColor = m.Value("backgroundColor")?.ToString();
+    var backgroundColor = "#" + (string.IsNullOrWhiteSpace(propBackgroundColor) ? "fff" : propBackgroundColor);
+    
+    ViewBag.Header = string.IsNullOrWhiteSpace(header) ? ViewBag.Header : header;
+    ViewBag.SubHeader = string.IsNullOrWhiteSpace(subHeader) ? ViewBag.SubHeader : subHeader;
+}
+
+<section id="@sectionId" class="@ViewBag.NoOverflowClass" style="background-color: @backgroundColor">
+    <div class="container">
+        <div class="heading-wrapper text-center">
+            <h1 class="heading">@ViewBag.Header</h1>
+            <div class="squares">
+                <span class="square"></span>
+                <span class="square"></span>
+                <span class="square"></span>
+                <span class="square"></span>
+                <span class="square"></span>
+                <span class="square"></span>
+            </div>
+            <div class="sub-heading">
+                <p>@ViewBag.SubHeader</p>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+</section>

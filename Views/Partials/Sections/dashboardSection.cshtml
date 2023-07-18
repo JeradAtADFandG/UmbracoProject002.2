@@ -1,0 +1,27 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.DashboardSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+    var test = Model.DashboardItems.Select(x => (ContentModels.DashboardItem)x.Content);
+
+}
+
+
+
+
+<div class="employee-dashboard">
+<div class="col">
+        <div class="row row-cols-auto justify-content-center">
+@Html.GetBlockListHtml(Model.DashboardItems);
+
+        </div>
+        @foreach (var t in test)
+        
+        {
+            <div>@t.SectionHeader</div>
+            
+        }
+
+</div>
+</div>

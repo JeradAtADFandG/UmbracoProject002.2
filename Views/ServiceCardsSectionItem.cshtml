@@ -1,0 +1,31 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ServiceCardsSectionItem>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "_DefaultBannerLayout.cshtml";
+}
+
+<style>
+    #serviceCardsSectionItem,
+    .main-service.show { min-height: 800px; }
+    .main-service.show { position: relative; background-color: #132a46; z-index: 9990; }
+    .main-service.show .service-highlights > .go-back-icon { display: none; }
+</style>
+
+<div id="serviceCardsSectionItem"></div>
+
+@section Scripts {
+    <script type="text/javascript">  
+        $(document).ready(function() {
+            
+            var $serviceCardsSectionItem = $("#serviceCardsSectionItem");
+            $serviceCardsSectionItem.load('@Url.Content("/umbraco/Surface/ModalsSurface/RenderServiceCardsSectionItem?id=" + @Model.Id)', function() {
+                $serviceCardsSectionItem.find("#mainService").addClass("show");
+                // Re-use service cards module functionality
+                app.modules.serviceCards.init("serviceCardsSectionItem");
+            });
+        });
+        
+    </script>
+}

@@ -1,0 +1,36 @@
+﻿@inherits UmbracoViewPage<DashboardCardsSectionItem>
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+
+    var m = Model;
+    var icon = m.Icon;
+    var header = m.SectionHeader;
+    var subHeader = m.SectionSubHeader;
+    var content = m.Content;
+    var link = m.Link.First();
+
+
+}
+
+            
+                    <div class="col">
+                        <div class="dashboard-item">
+                            <div class="icon">
+                                <a href="@(link == null ? link : link)">
+                                    
+                                    
+                                        <img alt="image.Name" src="image.Url" style="max-width:42px; max-height:40px;" />
+                                    
+                                   
+                                    
+                                        <i class="fa @icon"></i>
+                                    
+                                    <span class="sr-only">@header</span>
+                                </a>
+                                
+                            </div>
+                            <h3>@header</h3>
+                        </div>
+                    </div>
+       

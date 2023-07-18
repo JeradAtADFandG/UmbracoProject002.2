@@ -1,0 +1,22 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home1>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+
+@{
+    var m = Model;
+    //var content = Model.Content;
+    var bannerTitle = m.Name;
+    var heroImage = m.Value<IPublishedContent>("heroImage").MediaUrl();
+    var children = m.Children.Where(x => x.Value<bool>("includeChild"));
+    
+    ViewBag.HeroBgImage = heroImage;
+    ViewBag.BannerTitle = bannerTitle;
+    Layout = "Master.cshtml";
+}
+
+@foreach(var child in children)
+{
+    var partialView = "/Views/Partials/Sections/" + child.ContentType.Alias + ".cshtml";
+    @Html.Partial(partialView, child);
+}

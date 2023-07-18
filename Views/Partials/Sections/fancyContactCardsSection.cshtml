@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.FancyContactCardsSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+    
+    var col = 1;
+    var colsAllowed = 2;
+    var cards = Model.Children();
+}
+
+@if (cards != null && cards.Any())
+{
+    var lastCard = cards?.Last();
+    foreach (var card in cards)
+    {
+        var email = card.Value("fancyContactCardEmail");
+
+        if (col == 1)
+        {
+            @:<!-- Start row -->
+            @:<div class="row">
+        }
+            <div class='col-lg-6 @(col == 1 ? "col-xxl-5 offset-xxl-1" : "col-xxl-5") text-center'>
+                <div class="contact-info fancy text-center">
+                    <h2 class="contact-name">@card.Value("fancyContactCardName")</h2>
+                    <span class="contact-decoration"></span>
+                    <h4 class="contact-title">@card.Value("fancyContactCardTitle")</h4>
+                    <a class="contact-email interactive" href="mailto:@email">@email</a>
+                </div>
+            </div>
+        if (col == colsAllowed || card.Equals(lastCard))
+        {
+            @:</div>
+            @:<!-- End row -->
+        }
+        col = (col++ % colsAllowed) + 1;
+    }
+}

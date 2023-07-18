@@ -1,0 +1,28 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.FeatureItemsSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+    ViewBag.NoOverflowClass = "no-overflow";
+    
+    var content = Model;
+    
+    var count = 0;
+    var items = content.Children();
+}
+
+@if (items != null && items.Any())
+{
+    <div class="row">
+        @foreach(var item in items)
+        {
+            <div class="col-lg-6 col-xl-4">
+                <div class="feature-item">
+                    <span class='big fa @(item.Value("featureItemIcon")) icon'></span>
+                    <h2 class="title">@(item.Value("featureItemTitle"))</h2>
+                    <p class="text">@(item.Value("featureItemText"))</p>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,362 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Extensions
+@{
+    Layout = null;
+    var site = Umbraco.AssignedContentItem.AncestorOrSelf<Home>();
+    var m = Model;
+    var departmentName = site.Value<string>("departmentName");
+    var divisionName = site.Value<string>("divisionName");
+    //var favicon = site.Value<IPublishedContent>("favicon").Url; This will depreciate to a static favicon link due to lack of .ico file type in umb back office
+    var logoUrl = site.Value<IPublishedContent>("logo").MediaUrl();
+    var webmasterEmail = site.Value<string>("webmasterEmail");
+    var contactUsEmail = site.Value<string>("contactUsEmail");
+    var physicalAddressLines = site.Value<string[]>("physicalAddressLines");
+    var mailingAddressLines = site.Value<string[]>("mailingAddressLines");
+    var agencyPhoneNumbers = site.AgencyPhoneNumbers;
+
+    var primaryNav = site.Children<PrimaryNavigationContainer>().FirstOrDefault();
+    var navItemCollection = primaryNav?.Children<PrimaryNavigationItem>();
+
+    var ancestors = site.Ancestors().Where(x => x.IsVisible()).OrderBy(x => x.Level);
+
+    var siteSettingsContainer = site.Children.Where(x => x.ContentType.Alias == "siteSettingsContainer").FirstOrDefault();
+    var themeSettings = siteSettingsContainer.Children.Where(x => x.ContentType.Alias == "themeSettings").FirstOrDefault();
+    var themeOption = themeSettings.Value<string>("themeOptions").ToString().ToLower() + ".css";
+    //Session["ContactUsEmail"] = contactUsEmail; Not sure on this one.
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>@m.Name, @divisionName, State of Alaska</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
+    <!-- render css in this spot -->
+    <link href="/css/bootstrap-5.2.min.css" rel="stylesheet">
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- end css js -->
+    <link href="https://webcontent.alaska.gov/style/oit/20220808/site.css" rel="stylesheet">
+    <link href="https://webcontent.alaska.gov/style/oit/20220808/@themeOption" rel="stylesheet">
+    <link id="highContrast" type="text/css" rel="stylesheet" href="">
+    <link href="/fonts/fontawesome-free-6-2-1/css/all.min.css" rel="stylesheet">
+    <link href="https://webcontent.alaska.gov/style/oit/2.1/css/build/default.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header id="header" class="header navbar navbar-default navbar-expand-lg bd-navbar">
+        <nav id="navbar" class="container bd-gutter flex-wrap flex-lg-nowrap" aria-label="Main navigation">
+            <a href="https://www.alaska.gov" class="logo navbar-brand p-0 me-0 me-lg-2">State of Alaska</a>
+
+            <section id="required-greeting" class="greeting-wrapper">
+                <p class="visuallyhidden">The following is a greeting given in one of the 20 indigenous languages recognized by the State of Alaska.</p>
+                <dl id="language-greeting">
+                    <dt class="greeting"><a class="language-link" href="https://www.commerce.alaska.gov/web/dcra/AKNativeLanguagePreservationAdvisoryCouncil/Languages.aspx">Ade’ ndadz dengit’a?</a></dt>
+                    <dd class="speaker">
+                        <audio id="deg-xinag" src="https://webcontent.alaska.gov/style/soa/20180919/greetingAssets/deg-xinag.mp3" preload="auto"></audio>
+                        <button class="pronunciation" onclick="document.getElementById('deg-xinag').play();">Listen to pronunciation</button>
+                    </dd>
+                    <dd class="language">(Deg Xinag)</dd>
+                    <dd class="translation">"Hello, how are you?"</dd>
+                </dl>
+            </section>
+
+            <button class="navbar-toggler d-flex d-lg-none border-0 order-3 p-2 text-white" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-label="Toggle navigation">
+                Statewide Links
+            </button>
+
+            <div class="offcanvas-lg offcanvas-end" tabindex="-1" id="bdNavbar" aria-labelledby="bdNavbarOffcanvasLabel" data-bs-scroll="true">
+                <div class="offcanvas-header px-4 pb-0">
+                    <h5 class="offcanvas-title text-white" id="bdNavbarOffcanvasLabel">State of Alaska</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#bdNavbar"></button>
+                </div>
+
+                <hr class="d-lg-none text-white-50">
+
+                <div class="offcanvas-body p-4 pt-0 p-lg-0">
+                    <ul class="navbar-nav flex-row flex-wrap ms-md-auto">
+                        <li class="nav-item col-6 col-xs-12 col-lg-auto">
+                            <a class="nav-link py-2 px-0 px-lg-2" href="https://my.alaska.gov" target="_blank">myAlaska</a>
+                        </li>
+                        <li class="nav-item col-6 col-xs-12 col-lg-auto">
+                            <a class="nav-link py-2 px-0 px-lg-2" href="https://alaska.gov/akdir1.html" target="_blank">Departments</a>
+                        </li>
+                        <li class="nav-item col-6 col-xs-12 col-lg-auto">
+                            <a class="nav-link py-2 px-0 px-lg-2" href="https://alaska.gov/employeeHome.html" target="_blank">State Employees</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main id="main">
+        <section id="heroArea" class="hero-area parallax-window" style="background-color: rgba(0,0,0,@ViewBag.BannerImageOpacity)" data-parallax="scroll" data-image-src="@ViewBag.HeroBgImage">
+            @RenderSection("HeroAreaContent", required: false)
+            @if (!IsSectionDefined("HeroAreaContent"))
+            {
+                <div id="heroAreaContent" class="hero-area-content">
+                    <div class="container text-center">
+                        <div class="inline-block wp1 animated">
+                            <div class="hero">
+                                <div class="logo-wrapper">
+                                    <img class="logo" src="@logoUrl" alt="Logo">
+                                </div>
+                                <div class="title-wrapper">
+                                    <h2 class="sub-title">@departmentName</h2>
+                                    <h1 class="title">@divisionName</h1>
+                                </div>
+                            </div>
+                            <div class="search">
+                                <form action="/settings/search-results/" method="get" name="gs">
+                                    <input type="search" class="form-control" placeholder="Search" name="q">
+                                    <button class="btn-clear" aria-label="Search" name="submit" type="submit"><i class="icon fa fa-search"></i></button>
+                                </form>
+                            </div> 
+                            <p class="lead">
+                                @m.Value("homeMissionStatement")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div id="navAreaContent" class="nav-area-content">
+                <nav id="mainNav" class="navbar navbar-expand-xl navbar-default navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header pull-left">
+                            <div class="navbar-toggler collapsed hamburger hamburger--spin js-hamburger"
+                                 type="button"
+                                 data-bs-toggle="collapse"
+                                 data-bs-target="#mainNavCollapse"
+                                 aria-expanded="false"
+                                 aria-controls="mainNavCollapse"
+                                 aria-label="Toggle navigation">
+                                <div class="hamburger-box">
+                                    <div class="hamburger-inner"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Start Navigation  -->
+                        <div id="mainNavCollapse" class="navbar-collapse collapse" aria-expanded="false">
+                            <ul class="main nav navbar-nav text-uppercase">
+                                <li class="logo-wrapper" >
+                                    <a class="logo-link" href="/Home/">
+                                        <img class="logo" src="@logoUrl" alt="Logo link to home">
+                                    </a>
+                                </li>
+                                @if(navItemCollection != null && navItemCollection.Any())
+                                {
+                                    foreach(var navItem in navItemCollection)
+                                    {
+                                        var multiUrlPickerItem = navItem.PrimaryNavigationItemUrl;
+                                        foreach (var property in multiUrlPickerItem)
+                                        {
+                                            var link = new { url = property.Url, target = property.Target, name = property.Name};
+                                            var navItemItems = navItem.Children<PrimaryNavigationItem>();
+                                        
+                                        // Link might be null if page is deleted
+                                        if (link != null && navItemItems.Any())
+                                        {
+                                            <li class="nav-item dropdown">
+                                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    @link.name 
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                @foreach(var subNavItem in navItemItems)
+                                                {
+                                                    var multiUrlPickerItem2 = subNavItem.PrimaryNavigationItemUrl;
+                                                    foreach (var property2 in multiUrlPickerItem2)
+                                                       {
+                                                          var subLink = new { url = property2.Url, target = property2.Target, name = property2.Name};
+                                                    if(subLink != null)
+                                                    {
+                                                          <li><a href="@subLink.url" class="dropdown-item" target="@subLink.target">@subLink.name</a></li>
+                                                    }
+                                                            }
+                                                }
+                                                </ul>
+                                            </li>
+                                        }
+                                        else if (link != null)
+                                        {
+                                            <li class="nav-item"><a class="nav-link" href="@link.url" target="@link.target">@link.name</a></li>
+                                        }
+
+                                        }
+
+                                    }
+                                }
+                            </ul>
+                        </div>
+                        <!-- End Navigation  -->
+                    </div>
+                </nav>
+                <div class="container">
+                    <div class="row">
+                        <div id="breadcrumbs" class="breadcrumb">
+                            <a href="https://alaska.gov">State of Alaska</a>
+                            
+                            @if(ViewBag.BannerTitle.ToString() == "Home")
+                            {
+                                @:<span class="first-forwardslash">/</span>/ Home
+                            }
+                            else
+                            {
+                                foreach(var ancestor in ancestors)
+                                {
+                                    if(ancestor.Name != "Root")
+                                    {
+                                        <span class="first-forwardslash">/</span><span class="first-forwardslash">/</span> 
+                                        <a href="@ancestor.Url()" class="first-forwardslash">@ancestor.Name</a>
+                                    }
+                                }
+                                @:<span class="first-forwardslash">/</span>/ @ViewBag.BannerTitle
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        @RenderBody()
+    </main>
+
+    <footer id="footer" class="footer no-overflow">
+        <div class="nav-top-wrapper">
+            <div class="nav-top-scroll">
+                <a href="#smooth-header"><i class="icon fa fa-angle-up"></i><span class="sr-only">Return to Top</span></a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="nav-wrapper">
+                        <ul class="nav">
+                            <li><a href="https://doa.alaska.gov/ada/resources/web.html" target="_blank">Accessibility</a></li>
+                            <li><a href="https://doa.alaska.gov/drm/oru/" target="_blank">Report Fraud</a></li>
+                            <li><a href="/contact-us">Contact Us</a></li>
+                            <li><a href="/settings/site-map">Site Map</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="address text-end">
+                        <address>
+                            @{
+                                <ul>
+                                    <li class="title">Physical Address</li>
+                                    @foreach (var item in physicalAddressLines)
+                                    {
+                                        <li>@item</li>
+                                    }
+                                </ul>
+                                <ul>
+                                    <li class="title gutter-top">Mailing Address</li>
+                                    @foreach (var item in mailingAddressLines)
+                                    {
+                                        <li>@item</li>
+                                    }
+                                </ul>
+                                <ul>
+                                    <li class="title gutter-top">Agency Phone Number(s)</li>
+                                    @foreach (var link in agencyPhoneNumbers)
+                                    {
+                                        // var link = new {url = mup.Url, target = mup.Target, name = mup.Name};
+                                        <li><a href="@link.Url" target="@link.Target">@link.Name</a></li>
+                                        
+                                    }
+                                </ul>
+                            }
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sub-navigation text-center">
+            <a href="index.htm"><img class="logo" src="/Assets/ak-state-seal-70.png" alt="Alaska State Seal"></a>
+            <ul class="menu">
+                <li><a href="https://alaska.gov" itemprop="url" target="_blank">State of Alaska</a></li>·
+                <li><a href="https://aws.state.ak.us/ContactUs" itemprop="url" target="_blank">Contact Us</a></li>·
+                <li><a href="https://my.alaska.gov" itemprop="url" target="_blank">myAlaska</a></li>·
+                <li><a href="https://alaska.gov/akdir1.html" itemprop="url" target="_blank">Departments</a></li>·
+                <li><a href="https://alaska.gov/employeeHome.html" itemprop="url" target="_blank">State Employees</a></li>
+            </ul>
+            <p>COPYRIGHT  ©  STATE OF ALASKA · DEPARTMENT OF ADMINISTRATION · <a href="mailto:@webmasterEmail" class="a-und">EMAIL THE WEBMASTER</a></p>
+        </div>
+    </footer>
+
+      <widgets>
+        <!-- High Contrast Toggle  -->
+        <button type="button" class="btn btn-default btn-high-contrast" onclick="highContrast()"
+                aria-label="High Contrast Color Toggle" title="High Contrast Color Toggle">
+            <i class="fa fa-low-vision fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">High Contrast Color Toggle</span>
+        </button>
+
+        @Url.Action("FeedbackWidget", "ContactUsPartial")
+    </widgets>
+
+    <!-- Service Card modal placeholder -->
+    <div id="serviceCard"></div>
+    <!-- Sub-Service Card modal placeholder -->
+    <div id="subServiceCard"></div>
+    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    -->
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="/scripts/modernizr-2.8.3.js" type="text/javascript"></script>
+    <script src="/scripts/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="/scripts/jquery.validate-vsdoc.js" type="text/javascript"></script>
+    <script src="/scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="/scripts/jquery.form.min.js" type="text/javascript"></script>
+    <script src="/scripts/jQuery.tmpl.min.js" type="text/javascript"></script>
+    <script src="/scripts/moment.min.js" type="text/javascript"></script>
+    <script src="/scripts/bootstrap-5.2.bundle.min.js" type="text/javascript"></script>
+    <script src="/scripts/jquery.tiltedpage-scroll.js" type="text/javascript"></script>
+    <script src="/scripts/parallax.min.js" type="text/javascript"></script>
+    <script src="/scripts/readmore.min.js" type="text/javascript"></script>
+    <script src="/scripts/app.js" type="text/javascript"></script>
+    <script src="/scripts/validations/moduleDependency.js" type="text/javascript"></script>
+    <script src="/scripts/data/ajax.js" type="text/javascript"></script>
+    <script src="/scripts/utils/common.js" type="text/javascript"></script>
+    <script src="/scripts/utils/dialog.js" type="text/javascript"></script>
+    <script src="/scripts/utils/alerts.js" type="text/javascript"></script>
+    <script src="/scripts/utils/templates.js" type="text/javascript"></script>
+    <script src="/scripts/modules/base.js" type="text/javascript"></script>
+    <script src="/scripts/modules/accessibility.js" type="text/javascript"></script>
+    <script src="/scripts/modules/serviceCards.js" type="text/javascript"></script>
+    <script src="/scripts/site.js" type="text/javascript"></script>
+    <script src="/scripts/js-cookie.min.js" type="text/javascript"></script>
+    <script src="/scripts/cookies.js" type="text/javascript"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-55135437-8', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <script></script>
+</body>
+</html>

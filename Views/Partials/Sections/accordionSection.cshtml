@@ -1,0 +1,19 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.AccordionSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+}
+
+
+
+
+
+@Html.GetBlockListHtml(Model.AccordionItems);
+
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.PanelCardsSection>
+@using Umbraco.Web.Models
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+
+@{
+    var content = Model.Content;
+    var propBackgroundColor = content.GetPropertyValue<string>("backgroundColor");
+    var sectionId = content.GetPropertyValue<string>("sectionId");
+    var backgroundColor = "#" + (string.IsNullOrWhiteSpace(propBackgroundColor) ? "fff" : propBackgroundColor);
+    
+    var col = 1;
+    var colsAllowed = 3;
+    var cards = content.Children();
+}
+
+<section id="@sectionId" style="background-color: @backgroundColor">
+    <div class="container">
+        @if (cards != null && cards.Any())
+        {
+            var lastCard = cards?.Last();
+            foreach (var card in cards)
+            {
+                if (col == 1)
+                {
+                    @:<!-- Start row -->
+                    @:<div class="row justify-content-center">
+                }
+                        <div class="col-lg-6 col-xl-4">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h3>@card.Name</h3>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="rte">
+                                        @(Html.Raw(card.GetPropertyValue<string>("panelCardContent")))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                if (col == colsAllowed || card.Equals(lastCard))
+                {
+                    @:</div>
+                    @:<!-- End row -->
+                }
+                col = (col++ % colsAllowed) + 1;
+            }
+        }
+    </div>
+</section>

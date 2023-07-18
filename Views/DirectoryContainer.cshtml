@@ -1,0 +1,25 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.DirectoryContainer>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "_DefaultHeaderLayout.cshtml";
+    ViewBag.CallBannerLayout = true;
+
+    var content = Model;
+    var children = content.Children();
+    
+    ViewBag.Header = content.Name;
+    ViewBag.SubHeader = "List of pages this directory contains.";
+}
+
+<div>
+    <ul class="list-group">
+    @foreach(var child in children)
+    {
+        <li class="list-group-item">
+            <a href="@child.Url()" class="link" title="@child.Name">@child.Name</a> <i class="fa fa-external-link"></i>
+        </li>
+    }
+    </ul>
+</div>

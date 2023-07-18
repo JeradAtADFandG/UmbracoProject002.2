@@ -1,0 +1,61 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.LinkCardsSection>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "/Views/_DefaultHeaderLayout.cshtml";
+    var m = Model;
+    
+    var iconOne = m.LinkCardOneIcon;
+    var titleOne = m.LinkCardOneTitle;
+    var linkOne = m.LinkCardOneLink;
+    var textOne = m.LinkCardOneText;
+    var textSupportOne = m.LinkCardOneTextSupport;
+    
+    var iconTwo = m.LinkCardTwoIcon;
+    var titleTwo = m.LinkCardTwoTitle;
+    var linkTwo = m.LinkCardTwoLink;
+    var textTwo = m.LinkCardTwoText;
+    var textSupportTwo = m.LinkCardTwoTextSupport;
+    
+    var iconThree = m.LinkCardThreeIcon;
+    var titleThree = m.LinkCardThreeTitle;
+    var linkThree = m.LinkCardThreeLink;
+    var textThree = m.LinkCardThreeText;
+    var textSupportThree = m.LinkCardThreeTextSupport;
+}
+
+<div class="row row-cols-auto justify-content-center">
+    <div class="col">
+        <div class="link-card">
+            <span class="big fa @iconOne icon"></span>
+            <h2 class="title"><a href="@linkOne.Url" class="interactive">@titleOne</a></h2>
+            <p class="text">@textOne</p>
+            <i class="support-text" style="font-size: 13px;">@textSupportOne</i>
+            <div class="graphic"><span class="fa fa-star graphic-icon"></span></div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="link-card">
+            <span class="big fa @iconTwo icon"></span>
+            <h2 class="title">@{
+                    if (linkTwo != null) {
+                        <a href="@linkTwo.Url" class="interactive">@titleTwo</a>
+                    }
+                }</h2>
+            <p class="text">@textTwo</p>
+            <i class="support-text" style="font-size: 13px;">@textSupportTwo</i>
+        </div>
+    </div>
+    <div class="col">
+        <div class="link-card">
+            <span class="big fa @iconThree icon"></span>
+            <h2 class="title">@{
+                if (linkThree != null) {
+                <a href="@linkThree.Url" class="interactive">@titleThree</a>
+                }}
+            </h2>
+            <p class="text">@textThree</p>
+            <i class="support-text" style="font-size: 13px;">@textSupportThree</i>
+        </div>
+    </div>
+</div>

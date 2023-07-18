@@ -1,0 +1,97 @@
+﻿@inherits UmbracoViewPage<int>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Cms.Core
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Services
+@inject IContentTypeService ContentTypeService
+@{
+    // Model is the id of the service card
+    var id = Model;
+    var col = 1;
+    var colsAllowed = 4;
+    
+    var serviceCard = Umbraco.Content(id);
+    var subServiceCards = Umbraco.Content(id).Children();
+    
+    var itemImage = serviceCard.Value<IPublishedContent>("itemImage");
+    var itemFile = serviceCard.Value<IPublishedContent>("itemFile");
+    var itemFileTitle = serviceCard.Value<string>("itemFileTitle");
+    var itemDescription = serviceCard.Value<string>("itemDescription");
+    var itemContent = Html.Raw(serviceCard.Value<string>("itemContent"));
+    
+    // Assign default value if the user has not entered file title
+    itemFileTitle = string.IsNullOrWhiteSpace(itemFileTitle) ? "View the SLA" : itemFileTitle;
+}
+
+<div id="mainService" class="main-service-modal" aria-describedby='modalDescription'>
+    <div class="container">
+        <div class="sr-only" id="modalDescription">
+            <p>This is a Modal overlay covering the site content. It is the first of two possible overlays. 
+            It contains content and links pertinent to the Service Card Categories. Selecting 'Go Back' 
+            in this modal will take you back to previous screen.</p>
+        </div>
+        <a href="#" class="focusLoop"><!-- Focus Loop --></a>
+        <div class="main-service-modal-banner">
+            <h1 class="main-service-modal-title js-mainServiceTitle">@serviceCard.Name</h1>
+            <div class="main-service-modal-image-wrapper">
+                <img class="main-service-modal-image-wrapper-img" src="@itemImage.Url()">
+            </div>
+        </div>
+        <div class="main-service-modal-highlights">
+            <div class="main-service-modal-go-back js-go-back">
+                <a href="#" class="interactive">
+                    <i class="main-service-modal-go-back-icon fa fa-arrow-circle-left"></i>
+                    <span class="sr-only">Go Back</span>
+                </a>
+            </div>
+            <h2 class="main-service-modal-highlights-title">Service Highlights</h2>
+            <p class="main-service-modal-highlights-description">@itemDescription</p>
+            <div class="rte">@itemContent</div>
+
+            <div class="main-service-modal-links mt-4">
+                @if(itemFile != null)
+                {
+                    <a href="@itemFile.Url()" class="text-uppercase text-primary" title="@itemFileTitle" target="_blank">
+                        <i class="main-service-modal-links-icon fa fa-file"></i>
+                        @itemFileTitle
+                        <span class="sr-only">@itemFileTitle</span>
+                    </a>
+                }
+                @if (subServiceCards != null && subServiceCards.Any())
+                {
+                    var lastsubServiceCard = subServiceCards.Last();
+                    
+                    <div class="py-4">
+                        @foreach (var item in subServiceCards)
+                        {
+                            if (col == 1)
+                            {
+                                @:<!-- Start row -->
+                                @:<div class="row">
+                            }
+                                    <div class="col-xs-6 col-sm-3">
+                                        <div class="link-tile js-sub-service-link">
+                                            <a href="@item.Url()"
+                                                id="@item.Id" class="interactive"
+                                                data-request-url='@Url.Action("RenderServiceCardsSectionSubItem", "ModalsSurface")'>
+                                                <span class="sr-only">@item.Name Link</span>
+                                                <i id="@item.Id" class='link-tile-icon fa @item.Value("subItemIcon")'
+                                                    data-request-url='@Url.Action("RenderServiceCardsSectionSubItem", "ModalsSurface")'></i>
+                                            </a>
+                                            <h4 class="link-tile-title">@item.Name</h4>
+                                        </div>
+                                    </div>
+                            if (col == colsAllowed || item.Equals(lastsubServiceCard))
+                            {
+                                @:</div>
+                                @:<!-- End row -->
+                            }
+                            col = (col++ % colsAllowed) + 1;
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <a href="#" class="focusLoop"><!-- Focus Loop --></a>
+    </div>
+</div>

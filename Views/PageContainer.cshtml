@@ -1,0 +1,17 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.PageContainer>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+@{
+    Layout = "_DefaultBannerLayout.cshtml";
+
+    var children = Model.Children.Where(x => x.Value<bool>("includeChild"));
+}
+
+@foreach(var child in children)
+{
+    //var x = child.ContentType;
+    //var n = x.Alias;
+    var partialView = "/Views/Partials/Sections/" + child.ContentType.Alias + ".cshtml"; 
+    @Html.Partial(partialView, child);
+}
